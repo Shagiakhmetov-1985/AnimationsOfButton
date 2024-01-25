@@ -19,25 +19,25 @@ class MainViewController: UIViewController {
     }()
     
     private lazy var buttonAnimation: UIButton = {
-        let size = UIImage.SymbolConfiguration(pointSize: 22)
+        let size = UIImage.SymbolConfiguration(pointSize: 33)
         let image = UIImage(systemName: "arrowshape.right", withConfiguration: size)
         let button = UIButton(type: .system)
-        button.setTitle("Tap me", for: .normal)
-        button.titleLabel?.font = UIFont(name: "Palatino", size: 22)
-        button.titleLabel?.textAlignment = .center
-        button.setTitleColor(.white, for: .normal)
         button.setImage(image, for: .normal)
         button.tintColor = .white
         button.backgroundColor = #colorLiteral(red: 0.0486389026, green: 0.06296398491, blue: 0.8456050754, alpha: 1)
         button.layer.borderWidth = 2
         button.layer.borderColor = UIColor.white.cgColor
-        button.layer.cornerRadius = 20
+        button.layer.cornerRadius = 37.5
+        button.layer.shadowRadius = 5
+        button.layer.shadowOpacity = 0.4
+        button.layer.shadowOffset = CGSize(width: 0, height: 6)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(moveButton), for: .touchUpInside)
         return button
     }()
     
-    private var buttonSpring: NSLayoutConstraint!
+    private var buttonSpringX: NSLayoutConstraint!
+    private var buttonSpringY: NSLayoutConstraint!
     private var corner = Corner.rightUp
     
     override func viewDidLoad() {
@@ -64,26 +64,92 @@ class MainViewController: UIViewController {
     @objc private func moveButton() {
         switch corner {
         case .rightUp:
-            corner = .leftUp
+            corner = .rightDown
             right()
+        case .rightDown:
+            corner = .leftDown
+            down()
+        case .leftDown:
+            corner = .leftUp
+            left()
         default:
             corner = .rightUp
-            left()
+            up()
         }
     }
     
     private func right() {
-        UIView.animate(withDuration: 1) { [self] in
-            buttonSpring.constant += view.bounds.width / 2 + 33.5
-            buttonAnimation.backgroundColor = .systemPink
-            view.layoutIfNeeded()
-        }
+        let size = UIImage.SymbolConfiguration(pointSize: 33)
+        let image = UIImage(systemName: "arrowshape.down", withConfiguration: size)
+        moveAnimation(
+            time: CGFloat.random(in: 0.6...0.8),
+            constraint: buttonSpringX,
+            constant: view.bounds.width - 115,
+            color: UIColor(
+                red: CGFloat.random(in: 0...255)/255,
+                green: CGFloat.random(in: 0...255)/255,
+                blue: CGFloat.random(in: 0...255)/255,
+                alpha: 1),
+            corner: CGFloat.random(in: 0...37.5),
+            image: image)
+    }
+    
+    private func down() {
+        let size = UIImage.SymbolConfiguration(pointSize: 33)
+        let image = UIImage(systemName: "arrowshape.left", withConfiguration: size)
+        moveAnimation(
+            time: CGFloat.random(in: 0.6...0.8),
+            constraint: buttonSpringY,
+            constant: view.bounds.height / 1.3,
+            color: UIColor(
+                red: CGFloat.random(in: 0...255)/255,
+                green: CGFloat.random(in: 0...255)/255,
+                blue: CGFloat.random(in: 0...255)/255,
+                alpha: 1),
+            corner: CGFloat.random(in: 0...37.5),
+            image: image)
     }
     
     private func left() {
-        UIView.animate(withDuration: 1) { [self] in
-            buttonSpring.constant -= view.bounds.width / 2 + 33.5
-            buttonAnimation.backgroundColor = #colorLiteral(red: 0.0486389026, green: 0.06296398491, blue: 0.8456050754, alpha: 1)
+        let size = UIImage.SymbolConfiguration(pointSize: 33)
+        let image = UIImage(systemName: "arrowshape.up", withConfiguration: size)
+        moveAnimation(
+            time: CGFloat.random(in: 0.6...0.8),
+            constraint: buttonSpringX,
+            constant: -view.bounds.width + 115,
+            color: UIColor(
+                red: CGFloat.random(in: 0...255)/255,
+                green: CGFloat.random(in: 0...255)/255,
+                blue: CGFloat.random(in: 0...255)/255,
+                alpha: 1),
+            corner: CGFloat.random(in: 0...37.5),
+            image: image)
+    }
+    
+    private func up() {
+        let size = UIImage.SymbolConfiguration(pointSize: 33)
+        let image = UIImage(systemName: "arrowshape.right", withConfiguration: size)
+        moveAnimation(
+            time: CGFloat.random(in: 0.6...0.8),
+            constraint: buttonSpringY,
+            constant: -view.bounds.height / 1.3,
+            color: UIColor(
+                red: CGFloat.random(in: 0...255)/255,
+                green: CGFloat.random(in: 0...255)/255,
+                blue: CGFloat.random(in: 0...255)/255,
+                alpha: 1),
+            corner: CGFloat.random(in: 0...37.5),
+            image: image)
+    }
+    
+    private func moveAnimation(time: CGFloat, constraint: NSLayoutConstraint, 
+                               constant: CGFloat, color: UIColor, corner: CGFloat,
+                               image: UIImage?) {
+        UIView.animate(withDuration: time) { [self] in
+            constraint.constant += constant
+            buttonAnimation.backgroundColor = color
+            buttonAnimation.layer.cornerRadius = corner
+            buttonAnimation.setImage(image, for: .normal)
             view.layoutIfNeeded()
         }
     }
@@ -96,15 +162,19 @@ extension MainViewController {
             titleApp.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
         
-        let constant = -view.bounds.width / 2 + 83
-        buttonSpring = NSLayoutConstraint(
+        let constantX = -view.bounds.width / 2 + 57.5
+        let constantY = -view.bounds.height / 2 + 125
+        buttonSpringX = NSLayoutConstraint(
             item: buttonAnimation, attribute: .centerX, relatedBy: .equal, toItem: view,
-            attribute: .centerX, multiplier: 1, constant: constant)
-        view.addConstraint(buttonSpring)
+            attribute: .centerX, multiplier: 1, constant: constantX)
+        buttonSpringY = NSLayoutConstraint(
+            item: buttonAnimation, attribute: .centerY, relatedBy: .equal, toItem: view,
+            attribute: .centerY, multiplier: 1, constant: constantY)
+        
+        view.addConstraints([buttonSpringX, buttonSpringY])
         NSLayoutConstraint.activate([
-            buttonAnimation.widthAnchor.constraint(equalToConstant: 150),
-            buttonAnimation.heightAnchor.constraint(equalToConstant: 40),
-            buttonAnimation.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+            buttonAnimation.widthAnchor.constraint(equalToConstant: 75),
+            buttonAnimation.heightAnchor.constraint(equalToConstant: 75)
         ])
     }
 }
