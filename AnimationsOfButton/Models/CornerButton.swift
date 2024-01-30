@@ -13,3 +13,18 @@ enum Corner {
     case rightDown
     case leftDown
 }
+
+enum Images: String, CaseIterable {
+    case keyboard
+    case printer
+    case scanner
+    case faxmachine
+    case display
+    case display2 = "display.2"
+    case pc
+    case xserve
+    case macbook
+    case iphone
+    case ipad
+    case computermouse
+}

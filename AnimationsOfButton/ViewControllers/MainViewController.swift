@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol CustomCollectionViewDelegate {
+    func didTapCell(image: String)
+}
+
 class MainViewController: UIViewController {
     private lazy var titleApp: UILabel = {
         let label = UILabel()
@@ -36,9 +40,29 @@ class MainViewController: UIViewController {
         return button
     }()
     
+    private lazy var picture: UIImageView = {
+        let size = UIImage.SymbolConfiguration(pointSize: 55)
+        let image = UIImage(systemName: "questionmark", withConfiguration: size)
+        let imageView = UIImageView(image: image)
+        imageView.tintColor = .black
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
+    private lazy var titleName: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "Palatino", size: 24)
+        label.textColor = .black
+        label.text = "Free name"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     private var buttonSpringX: NSLayoutConstraint!
     private var buttonSpringY: NSLayoutConstraint!
+    
     private var corner = Corner.rightUp
+    private let cells = CustomCollectionView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,12 +71,18 @@ class MainViewController: UIViewController {
         setupConstraints()
     }
     
+    func setImage(image: String) {
+        titleName.text = image
+//        let size = UIImage.SymbolConfiguration(pointSize: 55)
+//        picture.image = UIImage(systemName: image, withConfiguration: size)
+    }
+    
     private func setupDesign() {
         view.backgroundColor = #colorLiteral(red: 0.743561089, green: 0.764533937, blue: 1, alpha: 1)
     }
     
     private func setupSubviews() {
-        setupSubviews(subviews: titleApp, buttonAnimation, on: view)
+        setupSubviews(subviews: titleApp, buttonAnimation, cells, picture, titleName, on: view)
     }
     
     private func setupSubviews(subviews: UIView..., on otherSubview: UIView) {
@@ -176,5 +206,28 @@ extension MainViewController {
             buttonAnimation.widthAnchor.constraint(equalToConstant: 75),
             buttonAnimation.heightAnchor.constraint(equalToConstant: 75)
         ])
+        
+        NSLayoutConstraint.activate([
+            cells.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            cells.topAnchor.constraint(equalTo: titleApp.bottomAnchor, constant: 30),
+            cells.widthAnchor.constraint(equalToConstant: 325),
+            cells.heightAnchor.constraint(equalToConstant: 200)
+        ])
+        
+        NSLayoutConstraint.activate([
+            picture.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            picture.bottomAnchor.constraint(equalTo: titleApp.topAnchor, constant: -30)
+        ])
+        
+        NSLayoutConstraint.activate([
+            titleName.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            titleName.bottomAnchor.constraint(equalTo: picture.topAnchor, constant: -30)
+        ])
+    }
+}
+
+extension MainViewController: CustomCollectionViewDelegate {
+    func didTapCell(image: String) {
+        titleName.text = image
     }
 }
