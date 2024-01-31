@@ -8,7 +8,7 @@
 import UIKit
 
 protocol CustomCollectionViewDelegate {
-    func didTapCell(image: String)
+    func didTapCell(image: String, title: String)
 }
 
 class MainViewController: UIViewController {
@@ -54,15 +54,30 @@ class MainViewController: UIViewController {
         label.font = UIFont(name: "Palatino", size: 24)
         label.textColor = .black
         label.text = "Free name"
+        label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
+    }()
+    
+    private lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.itemSize = CGSize(width: 50, height: 50)
+        layout.minimumLineSpacing = 4
+        layout.minimumInteritemSpacing = 4
+        let collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .clear
+        collectionView.register(CollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        return collectionView
     }()
     
     private var buttonSpringX: NSLayoutConstraint!
     private var buttonSpringY: NSLayoutConstraint!
     
     private var corner = Corner.rightUp
-    private let cells = CustomCollectionView()
+    private let images = Images.allCases.shuffled()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,18 +86,13 @@ class MainViewController: UIViewController {
         setupConstraints()
     }
     
-    func setImage(image: String) {
-        titleName.text = image
-//        let size = UIImage.SymbolConfiguration(pointSize: 55)
-//        picture.image = UIImage(systemName: image, withConfiguration: size)
-    }
-    
     private func setupDesign() {
         view.backgroundColor = #colorLiteral(red: 0.743561089, green: 0.764533937, blue: 1, alpha: 1)
     }
     
     private func setupSubviews() {
-        setupSubviews(subviews: titleApp, buttonAnimation, cells, picture, titleName, on: view)
+        setupSubviews(subviews: titleApp, buttonAnimation, collectionView, 
+                      picture, titleName, on: view)
     }
     
     private func setupSubviews(subviews: UIView..., on otherSubview: UIView) {
@@ -185,6 +195,20 @@ class MainViewController: UIViewController {
     }
 }
 
+extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        12
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! CollectionViewCell
+        let image = images[indexPath.item]
+        cell.imageForCell(image: image.rawValue)
+        cell.delegate = self
+        return cell
+    }
+}
+
 extension MainViewController {
     private func setupConstraints() {
         NSLayoutConstraint.activate([
@@ -208,10 +232,10 @@ extension MainViewController {
         ])
         
         NSLayoutConstraint.activate([
-            cells.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            cells.topAnchor.constraint(equalTo: titleApp.bottomAnchor, constant: 30),
-            cells.widthAnchor.constraint(equalToConstant: 325),
-            cells.heightAnchor.constraint(equalToConstant: 200)
+            collectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            collectionView.topAnchor.constraint(equalTo: titleApp.bottomAnchor, constant: 30),
+            collectionView.widthAnchor.constraint(equalToConstant: 325),
+            collectionView.heightAnchor.constraint(equalToConstant: 200)
         ])
         
         NSLayoutConstraint.activate([
@@ -227,7 +251,9 @@ extension MainViewController {
 }
 
 extension MainViewController: CustomCollectionViewDelegate {
-    func didTapCell(image: String) {
-        titleName.text = image
+    func didTapCell(image: String, title: String) {
+        titleName.text = title
+        let size = UIImage.SymbolConfiguration(pointSize: 55)
+        picture.image = UIImage(systemName: image, withConfiguration: size)
     }
 }

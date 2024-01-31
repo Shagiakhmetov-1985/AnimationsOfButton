@@ -9,9 +9,9 @@ import UIKit
 
 class CollectionViewCell: UICollectionViewCell {
     var delegate: CustomCollectionViewDelegate!
-    static let cell = "cell"
     
     private let picture = UIImageView()
+    private var imageName = String()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -24,6 +24,7 @@ class CollectionViewCell: UICollectionViewCell {
     }
     
     func imageForCell(image: String) {
+        imageName = image
         let size = UIImage.SymbolConfiguration(pointSize: 24)
         picture.image = UIImage(systemName: image, withConfiguration: size)
         picture.tintColor = .white
@@ -31,7 +32,7 @@ class CollectionViewCell: UICollectionViewCell {
     
     private func setViews() {
         backgroundColor = .systemGray
-        layer.cornerRadius = 6
+        layer.cornerRadius = 10
         contentView.addSubview(picture)
         picture.translatesAutoresizingMaskIntoConstraints = false
     }
@@ -46,6 +47,6 @@ class CollectionViewCell: UICollectionViewCell {
 
 extension CollectionViewCell {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
+        delegate.didTapCell(image: imageName, title: imageName.capitalized)
     }
 }

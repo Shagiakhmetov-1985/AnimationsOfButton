@@ -12,7 +12,6 @@
 		C3903B612B61294B004B845F /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3903B602B61294B004B845F /* MainViewController.swift */; };
 		C3903B662B61294C004B845F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C3903B652B61294C004B845F /* Assets.xcassets */; };
 		C3903B752B61A3FD004B845F /* CornerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3903B742B61A3FD004B845F /* CornerButton.swift */; };
-		C3E8E7DA2B67DBB300BCF3E2 /* CustomCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E8E7D92B67DBB300BCF3E2 /* CustomCollectionView.swift */; };
 		C3E8E7DD2B67DDF800BCF3E2 /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E8E7DC2B67DDF800BCF3E2 /* CollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -24,7 +23,6 @@
 		C3903B652B61294C004B845F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C3903B6A2B61294C004B845F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C3903B742B61A3FD004B845F /* CornerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CornerButton.swift; sourceTree = "<group>"; };
-		C3E8E7D92B67DBB300BCF3E2 /* CustomCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionView.swift; sourceTree = "<group>"; };
 		C3E8E7DC2B67DDF800BCF3E2 /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -58,7 +56,6 @@
 		C3903B5B2B61294B004B845F /* AnimationsOfButton */ = {
 			isa = PBXGroup;
 			children = (
-				C3E8E7D82B67DA5B00BCF3E2 /* Views */,
 				C3903B732B61A3E1004B845F /* Models */,
 				C3903B702B612961004B845F /* Applications */,
 				C3903B722B61299A004B845F /* ViewControllers */,
@@ -88,6 +85,7 @@
 		C3903B722B61299A004B845F /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				C3E8E7DB2B67DDCE00BCF3E2 /* Cell */,
 				C3903B602B61294B004B845F /* MainViewController.swift */,
 			);
 			path = ViewControllers;
@@ -99,15 +97,6 @@
 				C3903B742B61A3FD004B845F /* CornerButton.swift */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		C3E8E7D82B67DA5B00BCF3E2 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				C3E8E7DB2B67DDCE00BCF3E2 /* Cell */,
-				C3E8E7D92B67DBB300BCF3E2 /* CustomCollectionView.swift */,
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 		C3E8E7DB2B67DDCE00BCF3E2 /* Cell */ = {
@@ -187,7 +176,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C3E8E7DA2B67DBB300BCF3E2 /* CustomCollectionView.swift in Sources */,
 				C3903B612B61294B004B845F /* MainViewController.swift in Sources */,
 				C3E8E7DD2B67DDF800BCF3E2 /* CollectionViewCell.swift in Sources */,
 				C3903B5D2B61294B004B845F /* AppDelegate.swift in Sources */,
